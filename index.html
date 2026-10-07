@@ -397,35 +397,207 @@ Current Credits: <b id="profileCredits">5</b>
 </button>
 </nav>
 
-
 <script>
-let credits=5;
+let credits = 5;
 
 function show(id){
   document.querySelectorAll('.page').forEach(p=>{
     p.classList.remove('active');
   });
+
   document.getElementById(id).classList.add('active');
   window.scrollTo(0,0);
 }
 
-function generate(){
-  if(credits<=0){
-    alert("Credits ਖਤਮ ਹਨ। SUKHRAJ AI SHOP ਤੋਂ credits ਖਰੀਦੋ।");
+async function generate(){
+
+  const photoSection = document.getElementById("photo");
+
+  if(!photoSection.classList.contains("active")){
+    alert("📸 ਪਹਿਲਾਂ Photo → Video ਖੋਲ੍ਹੋ।");
+    show("photo");
+    return;
+  }
+
+  if(credits <= 0){
+    alert("Credits ਖਤਮ ਹਨ। ਪਹਿਲਾਂ Credits ਖਰੀਦੋ।");
     show("shop");
     return;
   }
 
-  credits--;
-  document.getElementById("credits").innerText=credits;
-  document.getElementById("profileCredits").innerText=credits;
+  const fileInput = photoSection.querySelector('input[type="file"]');
+  const promptBox = photoSection.querySelector("textarea");
 
-  alert("✅ Request ਤਿਆਰ ਹੈ! ਅਸਲੀ AI video generation API ਅਗਲੇ step ਵਿੱਚ connect ਕਰਾਂਗੇ।");
+  if(!fileInput.files || !fileInput.files[0]){
+    alert("📸 ਪਹਿਲਾਂ ਇੱਕ Photo ਚੁਣੋ।");
+    return;
+  }
+
+  const file = fileInput.files[0];
+  const prompt = promptBox.value.trim() ||
+    "Create a realistic cinematic video with smooth natural movement.";
+
+  const button = photoSection.querySelector(".generate");
+
+  button.disabled = true;
+  button.innerText = "⏳ AI Video ਬਣ ਰਹੀ ਹੈ...";
+
+  try {
+
+    // Photo ਨੂੰ ਛੋਟਾ ਕਰਕੇ Vercel payload limit ਤੋਂ ਬਚਾਉਣਾ
+    const imageData = await compressImage(file);
+
+    const response = await fetch("/api/generate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        image: imageData,
+        prompt: prompt,
+        duration: 5
+      })
+    });
+
+    const data = await response.json();
+
+    if(!response.ok || !data.success){
+      throw new Error(data.error || "Video generation failed");
+    }
+
+    if(!data.video){
+      throw new Error("Video URL ਨਹੀਂ ਮਿਲੀ।");
+    }
+
+    // ਸਿਰਫ਼ successful generation ਤੋਂ ਬਾਅਦ credit ਕੱਟੋ
+    credits--;
+
+    document.getElementById("credits").innerText = credits;
+    document.getElementById("profileCredits").innerText = credits;
+
+    showVideo(data.video);
+
+    alert("✅ ਤੁਹਾਡੀ AI Video ਤਿਆਰ ਹੈ!");
+
+  } catch(error) {
+
+    console.error(error);
+
+    alert("❌ Video ਨਹੀਂ ਬਣੀ:\n" + error.message);
+
+  } finally {
+
+    button.disabled = false;
+    button.innerText = "🎬 Generate Video";
+
+  }
 }
 
-function buy(amount){
-  alert("🛒 " + amount + " Credits selected. UPI/Payment gateway ਅਗਲੇ step ਵਿੱਚ connect ਕਰਾਂਗੇ।");
+
+function compressImage(file){
+
+  return new Promise((resolve,reject)=>{
+
+    const reader = new FileReader();
+
+    reader.onload = function(e){
+
+      const img = new Image();
+
+      img.onload = function(){
+
+        const maxSize = 1280;
+
+        let width = img.width;
+        let height = img.height;
+
+        if(width > maxSize || height > maxSize){
+
+          if(width > height){
+            height = Math.round(height * maxSize / width);
+            width = maxSize;
+          }else{
+            width = Math.round(width * maxSize / height);
+            height = maxSize;
+          }
+
+        }
+
+        const canvas = document.createElement("canvas");
+
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext("2d");
+
+        ctx.drawImage(img,0,0,width,height);
+
+        resolve(
+          canvas.toDataURL("image/jpeg",0.82)
+        );
+
+      };
+
+      img.onerror = reject;
+      img.src = e.target.result;
+
+    };
+
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+
+  });
+
 }
+
+
+function showVideo(url){
+
+  let box = document.getElementById("generatedVideoBox");
+
+  if(!box){
+
+    box = document.createElement("div");
+
+    box.id = "generatedVideoBox";
+
+    box.className = "box";
+
+    document.getElementById("photo").appendChild(box);
+
+  }
+
+  box.innerHTML = `
+    <h3>🎬 ਤੁਹਾਡੀ AI Video</h3>
+
+    <video
+      src="${url}"
+      controls
+      playsinline
+      style="width:100%;border-radius:15px;margin-top:12px;">
+    </video>
+
+    <a
+      href="${url}"
+      target="_blank"
+      download
+      style="
+        display:block;
+        text-align:center;
+        margin-top:12px;
+        padding:13px;
+        background:#2563eb;
+        color:white;
+        border-radius:12px;
+        text-decoration:none;
+        font-weight:bold;
+      ">
+      ⬇️ Download Video
+    </a>
+  `;
+
+}
+</script>
 </script>
 
 </body>
