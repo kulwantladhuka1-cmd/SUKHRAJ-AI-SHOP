@@ -1,0 +1,8 @@
+{
+  "name": "sukhraj-ai-shop",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@fal-ai/client": "^1.8.0"
+  }
+}
