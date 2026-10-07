@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="pa">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>SUKHRAJ AI SHOP</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:Arial,sans-serif;
+  background:#0b1020;
+  color:#fff;
+  min-height:100vh;
+}
+header{
+  padding:18px 16px;
+  background:linear-gradient(135deg,#6d28d9,#2563eb);
+  border-radius:0 0 25px 25px;
+}
+.logo{font-size:26px;font-weight:800}
+.sub{opacity:.85;margin-top:5px;font-size:13px}
+.credits{
+  margin-top:15px;
+  background:rgba(255,255,255,.15);
+  padding:12px;
+  border-radius:14px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.buy{
+  background:#fff;
+  color:#4f46e5;
+  border:0;
+  padding:8px 14px;
+  border-radius:20px;
+  font-weight:bold;
+}
+main{padding:18px 14px 90px}
+h2{margin:12px 0 14px}
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+.card{
+  background:#151c32;
+  border:1px solid #283352;
+  border-radius:18px;
+  padding:18px 12px;
+  text-align:center;
+  cursor:pointer;
+}
+.icon{font-size:32px;margin-bottom:8px}
+.card b{font-size:15px}
+.card p{font-size:11px;color:#aeb8d0;margin-top:5px}
+.box{
+  background:#151c32;
+  border:1px solid #283352;
+  padding:16px;
+  border-radius:18px;
+  margin-top:15px;
+}
+input,textarea,select{
+  width:100%;
+  padding:13px;
+  border:1px solid #394562;
+  background:#0e1528;
+  color:white;
+  border-radius:12px;
+  margin:8px 0;
+  outline:none;
+}
+textarea{min-height:90px;resize:none}
+button{
+  cursor:pointer;
+}
+.generate{
+  width:100%;
+  padding:15px;
+  border:0;
+  border-radius:14px;
+  color:#fff;
+  font-size:16px;
+  font-weight:bold;
+  background:linear-gradient(135deg,#7c3aed,#2563eb);
+  margin-top:8px;
+}
+.upload{
+  border:2px dashed #4b5b83;
+  padding:25px 10px;
+  text-align:center;
+  border-radius:15px;
+  color:#b9c3da;
+}
+.plans{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.plan{
+  background:#11182b;
+  border:1px solid #354263;
+  padding:16px 10px;
+  border-radius:16px;
+  text-align:center;
+}
+.price{
+  font-size:22px;
+  font-weight:bold;
+  margin:8px;
+}
+.nav{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  height:68px;
+  background:#11182b;
+  border-top:1px solid #2d3855;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+}
+.nav button{
+  background:none;
+  border:0;
+  color:#9ca8c4;
+  font-size:11px;
+}
+.nav span{
+  display:block;
+  font-size:21px;
+  margin-bottom:3px;
+}
+.page{display:none}
+.page.active{display:block}
+.notice{
+  background:#17213a;
+  border-left:4px solid #7c3aed;
+  padding:12px;
+  border-radius:10px;
+  font-size:13px;
+  margin-bottom:15px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">✨ SUKHRAJ AI</div>
+  <div class="sub">AI Video Creator & AI Shop</div>
+
+  <div class="credits">
+    <div>💰 Credits: <b id="credits">5</b></div>
+    <button class="buy" onclick="show('shop')">+ Buy Credits</button>
+  </div>
+</header>
+
+<main>
+
+<!-- HOME -->
+<section id="home" class="page active">
+<h2>🚀 Create with AI</h2>
+
+<div class="notice">
+  ਆਪਣੀ photo, video ਜਾਂ video link ਦਿਓ ਅਤੇ AI ਨਾਲ ਨਵੀਂ video ਬਣਾਓ।
+</div>
+
+<div class="grid">
+
+<div class="card" onclick="show('photo')">
+<div class="icon">📸</div>
+<b>Photo → Video</b>
+<p>Photo ਤੋਂ AI video</p>
+</div>
+
+<div class="card" onclick="show('link')">
+<div class="icon">🔗</div>
+<b>Video Link</b>
+<p>Link ਤੋਂ video</p>
+</div>
+
+<div class="card" onclick="show('voice')">
+<div class="icon">🎤</div>
+<b>AI Voice</b>
+<p>Voice generate ਕਰੋ</p>
+</div>
+
+<div class="card" onclick="show('text')">
+<div class="icon">✍️</div>
+<b>Text → Video</b>
+<p>Text ਤੋਂ video</p>
+</div>
+
+</div>
+
+<div class="box">
+<h3>⭐ SUKHRAJ AI</h3>
+<p style="color:#aeb8d0;margin-top:8px">
+Fast AI video creation platform
+</p>
+</div>
+</section>
+
+
+<!-- PHOTO -->
+<section id="photo" class="page">
+<h2>📸 Photo → Video</h2>
+
+<div class="box">
+<div class="upload">
+📁<br><br>
+<input type="file" accept="image/*">
+</div>
+
+<textarea placeholder="Video ਵਿੱਚ ਕੀ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ?"></textarea>
+
+<select>
+<option>9:16 Portrait</option>
+<option>16:9 Landscape</option>
+<option>1:1 Square</option>
+</select>
+
+<button class="generate" onclick="generate()">
+🎬 Generate Video
+</button>
+</div>
+</section>
+
+
+<!-- LINK -->
+<section id="link" class="page">
+<h2>🔗 Video Link → AI Video</h2>
+
+<div class="box">
+<input id="videoLink" type="url"
+placeholder="ਆਪਣੀ video ਦਾ link paste ਕਰੋ">
+
+<textarea placeholder="Video ਵਿੱਚ ਕੀ ਬਦਲਣਾ ਹੈ?"></textarea>
+
+<select>
+<option>9:16 Portrait</option>
+<option>16:9 Landscape</option>
+<option>1:1 Square</option>
+</select>
+
+<button class="generate" onclick="generate()">
+🚀 Create AI Video
+</button>
+
+<p style="font-size:11px;color:#8f9ab3;margin-top:12px">
+ਕੇਵਲ ਆਪਣੀ ਜਾਂ permission ਵਾਲੀ video ਵਰਤੋ।
+</p>
+</div>
+</section>
+
+
+<!-- VOICE -->
+<section id="voice" class="page">
+<h2>🎤 AI Voice</h2>
+
+<div class="box">
+<select>
+<option>Punjabi</option>
+<option>Hindi</option>
+<option>English</option>
+</select>
+
+<textarea placeholder="ਇੱਥੇ ਆਪਣਾ dialogue ਲਿਖੋ..."></textarea>
+
+<button class="generate" onclick="generate()">
+🔊 Generate Voice
+</button>
+</div>
+</section>
+
+
+<!-- TEXT -->
+<section id="text" class="page">
+<h2>✍️ Text → Video</h2>
+
+<div class="box">
+<textarea placeholder="ਆਪਣੀ video ਦਾ prompt ਲਿਖੋ..."></textarea>
+
+<select>
+<option>9:16 Portrait</option>
+<option>16:9 Landscape</option>
+</select>
+
+<button class="generate" onclick="generate()">
+🎬 Generate Video
+</button>
+</div>
+</section>
+
+
+<!-- VIDEOS -->
+<section id="videos" class="page">
+<h2>🎬 My Videos</h2>
+
+<div class="box">
+<p style="color:#aeb8d0;text-align:center;padding:25px">
+ਅਜੇ ਕੋਈ video ਨਹੀਂ ਬਣੀ।
+</p>
+</div>
+</section>
+
+
+<!-- SHOP -->
+<section id="shop" class="page">
+<h2>🛒 SUKHRAJ AI SHOP</h2>
+
+<div class="box">
+<h3>💰 Buy Credits</h3>
+
+<div class="plans">
+
+<div class="plan">
+<b>Starter</b>
+<div class="price">₹99</div>
+<p>100 Credits</p>
+<button class="generate" onclick="buy(100)">Buy</button>
+</div>
+
+<div class="plan">
+<b>Creator</b>
+<div class="price">₹299</div>
+<p>350 Credits</p>
+<button class="generate" onclick="buy(350)">Buy</button>
+</div>
+
+<div class="plan">
+<b>Pro</b>
+<div class="price">₹699</div>
+<p>900 Credits</p>
+<button class="generate" onclick="buy(900)">Buy</button>
+</div>
+
+<div class="plan">
+<b>Premium</b>
+<div class="price">₹1499</div>
+<p>2200 Credits</p>
+<button class="generate" onclick="buy(2200)">Buy</button>
+</div>
+
+</div>
+</div>
+
+<div class="box">
+<h3>👑 Pro Plan</h3>
+<p style="color:#aeb8d0;margin:8px 0">
+HD Export • No Watermark • More Credits
+</p>
+<button class="generate" onclick="alert('Payment system ਅਗਲੇ step ਵਿੱਚ ਜੋੜਾਂਗੇ।')">
+💳 Upgrade Pro
+</button>
+</div>
+</section>
+
+
+<!-- PROFILE -->
+<section id="profile" class="page">
+<h2>👤 Profile</h2>
+
+<div class="box">
+<input placeholder="Your Name">
+<input placeholder="Email">
+<p style="color:#aeb8d0;margin:10px 0">
+Current Credits: <b id="profileCredits">5</b>
+</p>
+<button class="generate">💾 Save Profile</button>
+</div>
+</section>
+
+</main>
+
+
+<!-- NAVIGATION -->
+<nav class="nav">
+<button onclick="show('home')">
+<span>🏠</span>Home
+</button>
+
+<button onclick="show('videos')">
+<span>🎬</span>Videos
+</button>
+
+<button onclick="show('shop')">
+<span>🛒</span>Shop
+</button>
+
+<button onclick="show('profile')">
+<span>👤</span>Profile
+</button>
+</nav>
+
+
+<script>
+let credits=5;
+
+function show(id){
+  document.querySelectorAll('.page').forEach(p=>{
+    p.classList.remove('active');
+  });
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function generate(){
+  if(credits<=0){
+    alert("Credits ਖਤਮ ਹਨ। SUKHRAJ AI SHOP ਤੋਂ credits ਖਰੀਦੋ।");
+    show("shop");
+    return;
+  }
+
+  credits--;
+  document.getElementById("credits").innerText=credits;
+  document.getElementById("profileCredits").innerText=credits;
+
+  alert("✅ Request ਤਿਆਰ ਹੈ! ਅਸਲੀ AI video generation API ਅਗਲੇ step ਵਿੱਚ connect ਕਰਾਂਗੇ।");
+}
+
+function buy(amount){
+  alert("🛒 " + amount + " Credits selected. UPI/Payment gateway ਅਗਲੇ step ਵਿੱਚ connect ਕਰਾਂਗੇ।");
+}
+</script>
+
+</body>
+  </html>
